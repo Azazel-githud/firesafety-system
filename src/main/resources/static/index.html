@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление продуктами</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-group, .search-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .product-item { padding: 10px; border: 1px solid #ddd; margin: 5px 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Управление продуктами</h1>
+        
+        <!-- Форма добавления продукта -->
+        <div class="form-section">
+            <h2>Добавить новую тревогу</h2>
+            <form id="productForm">
+                <div class="form-group">
+                    <label>Название тревоги:</label>
+                    <input type="text" id="title" placeholder="Введите название" required>
+                </div>
+                <div class="form-group">
+                    <label>Статус:</label>
+                    <input type="text" id="status" placeholder="Введите статус" required>
+                </div>
+                <div class="form-group">
+                    <label>Локация:</label>
+                    <input type="text" id="location" placeholder="Введите локацию" required>
+                </div>
+                <button type="submit">Добавить тревогу</button>
+            </form>
+            <div id="formMessage"></div>
+        </div>
+
+        <!-- Форма поиска -->
+        <div class="search-section">
+            <h2>Найти тревогу</h2>
+            <form id="productSearch">
+                <div class="search-group">
+                    <label for="search">Введите id:</label>
+                    <input type="number" id="searchId">
+                </div>
+                <button type="submit">Найти</button>
+                <div id="foundproducts">
+                    
+                </div>
+            </form>
+        </div>
+
+        <!-- Список продуктов -->
+        <div class="products-section">
+            <h2>Список тревог</h2>
+            <button onclick="loadProducts()">🔄 Обновить список</button>
+            <div id="productsList"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/alerts';
+
+        // Добавление продукта через JSON
+        document.getElementById('productForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const al = {
+                title: document.getElementById('title').value,
+                status: document.getElementById('status').value,
+                location: document.getElementById('location').value
+            };
+            console.log(al.title, al.status, al.location)
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {  
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(al)
+                });
+
+                if (response.ok) {
+                    alert('✅ Продукт успешно добавлен!');
+                    this.reset();
+                    loadProducts();
+                } else {
+                    alert('❌ Ошибка при добавлении продукта');
+                }
+            } catch (error) {
+                alert('❌ Ошибка сети: ' + error.message);
+            }
+        });
+
+        // Поиск продукта по Id
+        document.getElementById("productSearch").addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const searchId = document.getElementById("searchId").value;
+            if (!searchId) {
+                alert('❌ Введите ID для поиска');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL + `/${searchId}`);
+                
+                if (response.status === 404) {
+                    document.getElementById('foundproducts').innerHTML = 
+                        '<p>❌ Продукт с ID ' + searchId + ' не найден</p>';
+                    return;
+                }
+                
+                if (!response.ok) {
+                    throw new Error('Ошибка сервера: ' + response.status);
+                }
+
+                const al = await response.json();
+                const foundAlertsList = document.getElementById("foundproducts");
+                
+                foundAlertsList.innerHTML = `
+                    <div class="product-item">
+                        <strong>${al.id}. ${al.title}</strong> - ${al.status}.
+                        <button onclick="deleteProduct(${al.id})">🗑️ Удалить</button>
+                    </div>
+                `;
+            }
+            catch (error) {
+                console.error('Ошибка поиска:', error);
+                document.getElementById('foundproducts').innerHTML = 
+                    '<p>❌ Ошибка: ' + error.message + '</p>';
+            }
+        });
+
+        // Загрузка всех продуктов
+        async function loadProducts() {
+            try {
+                const response = await fetch(API_URL);
+                const alerts = await response.json();
+                
+                const alertsList = document.getElementById('productsList');
+                if (alerts.length === 0) {
+                    alertsList.innerHTML = '<p>Нет продуктов</p>';
+                    return;
+                }
+
+                alertsList.innerHTML = alerts.map(alert => `
+                    <div class="product-item">
+                        <strong>${alert.id}. ${akert.title}</strong> - ${alert.status}.
+                        <button onclick="deleteProduct(${alert.id})">🗑️ Удалить</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('productsList').innerHTML = 
+                    '<p>Ошибка загрузки: ' + error.message + '</p>';
+            }
+        }
+
+        // Удаление продукта
+        async function deleteProduct(id) {
+            if (!confirm('Удалить этот продукт?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('✅ Продукт удален');
+                    loadProducts();
+                }
+            } catch (error) {
+                alert('❌ Ошибка удаления: ' + error.message);
+            }
+        }
+
+        // Загружаем продукты при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>

@@ -2,8 +2,15 @@ package com.example.firesystem.controller;
 
 import com.example.firesystem.dto.AlertDto;
 import com.example.firesystem.service.AlertService;
+
+import jakarta.validation.Valid;
+
 import com.example.firesystem.enums.StatusType;
+import com.example.firesystem.model.Alert;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +44,11 @@ public class IncidentController {
     @PutMapping("/{id}/status_change")
     public AlertDto changeIncidentStatus(@PathVariable Long id, @RequestParam StatusType status) {
         return alertService.changeStatus(id, status);
+    }
+
+    @PostMapping
+    public ResponseEntity<AlertDto> createAlertDto(@RequestBody @Valid Alert alert) {
+        Alert newAlert = alertService.create(alert);
     }
 
     // POST /api/incidents/{id}/photos

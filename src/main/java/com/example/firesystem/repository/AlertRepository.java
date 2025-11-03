@@ -13,7 +13,4 @@ public interface AlertRepository extends JpaRepository<Alert, Long> {
 
     List<Alert> findByStatus(StatusType status);
 
-    List<Alert> findByLocationContainingIgnoreCase(String location);
-
-    List<Alert> findByTitleContainingIgnoreCase(String title);
 }

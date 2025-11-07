@@ -10,6 +10,7 @@ import com.example.firesystem.model.Alert;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,8 +48,9 @@ public class IncidentController {
     }
 
     @PostMapping
-    public ResponseEntity<AlertDto> createAlertDto(@RequestBody @Valid Alert alert) {
+    public ResponseEntity<Alert> createAlertDto(@RequestBody @Valid Alert alert) {
         Alert newAlert = alertService.create(alert);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newAlert);
     }
 
     // POST /api/incidents/{id}/photos

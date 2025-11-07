@@ -8,9 +8,13 @@ import com.example.firesystem.model.Alert;
 import com.example.firesystem.repository.AlertRepository;
 import com.example.firesystem.model.User;
 import com.example.firesystem.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,55 +23,67 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlertService {
 
-    private final AlertRepository alertRepository;
-    private final UserRepository userRepository;
+        private final AlertRepository alertRepository;
+        private final UserRepository userRepository;
 
-    public List<AlertDto> getAllAlerts() {
-        return alertRepository.findAll().stream()
-                .map(AlertMapper::alertToAlertDto)
-                .toList();
-    }
+        @Cacheable(value = "alerts", key = "#root.Methodname")
+        public List<AlertDto> getAllAlerts() {
+                return alertRepository.findAll().stream()
+                                .map(AlertMapper::alertToAlertDto)
+                                .toList();
+        }
 
-    public List<AlertDto> getAlertsByStatus(StatusType status) {
-        return alertRepository.findByStatus(status).stream()
-                .map(AlertMapper::alertToAlertDto)
-                .toList();
-    }
+        @Cacheable(value = "alertsByStatus", key = "#root.Methodname")
+        public List<AlertDto> getAlertsByStatus(StatusType status) {
+                return alertRepository.findByStatus(status).stream()
+                                .map(AlertMapper::alertToAlertDto)
+                                .toList();
+        }
 
-    public AlertDto getAlertById(Long id) {
-        Alert alert = alertRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
-        return AlertMapper.alertToAlertDto(alert);
-    }
+        public AlertDto getAlertById(Long id) {
+                Alert alert = alertRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
+                return AlertMapper.alertToAlertDto(alert);
+        }
 
-    public AlertDto assignAlert(Long id, Long userId) {
-        Alert alert = alertRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
+        @Caching(evict = {
+                        @CacheEvict(value = "alerts", allEntries = true),
+                        @CacheEvict(value = { "alerts", "alertsByStatus" }, key = "#id") })
+        @Transactional
+        public AlertDto assignAlert(Long id, Long userId) {
+                Alert alert = alertRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "User with id " + userId + " not found"));
+                alert.setAssignedTo(user);
+                alert = alertRepository.save(alert);
+                return AlertMapper.alertToAlertDto(alert);
+        }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " not found"));
+        @Caching(evict = {
+                        @CacheEvict(value = "alerts", allEntries = true),
+                        @CacheEvict(value = { "alerts", "alertsByStatus" }, key = "#status") })
+        @Transactional
+        public AlertDto changeStatus(Long id, StatusType status) {
+                Alert alert = alertRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
+                alert.setStatus(status);
+                return AlertMapper.alertToAlertDto(alert);
+        }
 
-        alert.setAssignedTo(user);
+        @Caching(evict = {
+                        @CacheEvict(value = "alerts", allEntries = true),
+                        @CacheEvict(value = { "alerts", "alertsByStatus" }, key = "#status") })
+        @Transactional
+        public AlertDto addPhotoToAlert(Long id, String photoUrl) {
+                Alert alert = alertRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
+                alert.getPhotoUrls().add(photoUrl);
+                return AlertMapper.alertToAlertDto(alert);
+        }
 
-        alert = alertRepository.save(alert);
-        return AlertMapper.alertToAlertDto(alert);
-    }
-
-    public AlertDto changeStatus(Long id, StatusType status) {
-        Alert alert = alertRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
-
-        alert.setStatus(status);
-
-        return AlertMapper.alertToAlertDto(alert);
-    }
-
-    public AlertDto addPhotoToAlert(Long id, String photoUrl) {
-        Alert alert = alertRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Alert with id " + id + " not found"));
-
-        alert.getPhotoUrls().add(photoUrl);
-
-        return AlertMapper.alertToAlertDto(alert);
-    }
+        public Alert create(Alert alert) {
+                return alertRepository.save(alert);
+        }
 }

@@ -27,7 +27,7 @@ public class Alert {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private StatusType status; // "new", "in_progress", "resolved"
+    private StatusType status; // "new_status, "in_progress", "resolved"
 
     @ElementCollection
     private List<String> photoUrls; // Список URL-адресов фото

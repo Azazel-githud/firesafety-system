@@ -1,36 +1,29 @@
 package com.example.firesystem.service;
 
 import java.util.List;
-import com.example.firesystem.repository.UserRepository;
 
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Service;
-
-import com.example.firesystem.dto.UserDto;
 import com.example.firesystem.exception.ResourceNotFoundException;
+import com.example.firesystem.dto.UserDto;
 import com.example.firesystem.mapper.UserMapper;
 import com.example.firesystem.model.User;
+import com.example.firesystem.repository.UserRepository;
 
-@RequiredArgsConstructor
-@Service
 public class UserService {
-
-    private final UserRepository userRepository;
+    UserRepository userRepository;
 
     public List<UserDto> getUsers() {
         return userRepository.findAll().stream().map(UserMapper::userToUserDto).toList();
     }
 
     public UserDto getUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + "not found"));
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User with id " + id + " not found"));
         return UserMapper.userToUserDto(user);
     }
 
-    public UserDto getUser(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + "not found"));
-        return UserMapper.userToUserDto(user);
+    public User getUser(String name) {
+        User user = userRepository.findByUsername(name).orElseThrow(
+                () -> new ResourceNotFoundException("User with username " + name + " not found"));
+        return user;
     }
 }

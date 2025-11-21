@@ -5,6 +5,8 @@ import com.example.firesystem.exception.ResourceNotFoundException;
 import com.example.firesystem.mapper.SensorMapper;
 import com.example.firesystem.model.Sensor;
 import com.example.firesystem.repository.SensorRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +28,19 @@ public class SensorService {
         Sensor sensor = sensorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sensor with id " + id + " not found"));
         return SensorMapper.sensorToSensorDto(sensor);
+    }
+
+    @Transactional
+    public Sensor createSensor(Sensor sensor) {
+        return sensorRepository.save(sensor);
+    }
+
+    @Transactional
+    public boolean deleteSensor(Long id) {
+        if (sensorRepository.existsById(id)) {
+            sensorRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

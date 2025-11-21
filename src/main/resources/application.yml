@@ -34,11 +34,11 @@ jwt:
   secret: "myVerySecretKey123456789012345678901234567890" # <-- ЗАМЕНИ НА СВОЙ КЛЮЧ, лучше сгенерированный
   access:
     duration:
-      minute: 5
-      second: 300
+      minutes: 5
+      seconds: 300
     cookie-name: access-token
   refresh:
     duration:
-      day: 7
-      second: 604800
+      days: 7
+      seconds: 604800
     cookie-name: refresh-token

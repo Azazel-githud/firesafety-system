@@ -31,8 +31,8 @@ public class IncidentController {
 
     // GET /api/incidents/{id}
     @GetMapping("/{id}")
-    public AlertDto getIncident(@PathVariable Long id) {
-        return alertService.getAlertById(id);
+    public ResponseEntity<AlertDto> getIncident(@PathVariable Long id) {
+        return ResponseEntity.ok().body(alertService.getAlertById(id));
     }
 
     // PUT /api/incidents/{id}/assign

@@ -21,6 +21,14 @@
         h1 {
             color: #d32f2f;
         }
+        .auth-section {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .auth-section h2 {
+            margin-top: 0;
+        }
         input, button, select {
             margin: 5px;
             padding: 8px;
@@ -48,6 +56,23 @@
             margin-bottom: 30px;
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
+            display: none; /* Скрыто до входа */
+        }
+        .hidden {
+            display: none;
+        }
+        .visible {
+            display: block;
+        }
+        .logout-section {
+            text-align: right;
+            margin-top: -30px;
+        }
+        .logout-btn {
+            background-color: #9e9e9e;
+        }
+        .logout-btn:hover {
+            background-color: #757575;
         }
     </style>
 </head>
@@ -55,120 +80,235 @@
     <div class="container">
         <h1>FireSystem API Tester</h1>
 
-        <div class="section">
-            <h2>Создать Alert (Через Форму)</h2>
-            <form id="createAlertForm">
-                <label for="sensorIdForm">ID Сенсора:</label>
-                <input type="number" id="sensorIdForm" name="sensorId" required><br>
+        <!-- Секция авторизации -->
+        <div id="authSection" class="auth-section">
+            <h2>Авторизация</h2>
+            <div>
+                <input type="text" id="loginUsername" placeholder="Имя пользователя">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button onclick="login()">Войти</button>
+            </div>
+            <h2>Регистрация</h2>
+            <div>
+                <input type="text" id="registerUsername" placeholder="Имя пользователя">
+                <input type="password" id="registerPassword" placeholder="Пароль">
+                <button onclick="register()">Зарегистрироваться</button>
+            </div>
+        </div>
 
-                <label for="typeForm">Тип события:</label>
-                <select id="typeForm" name="type" required>
-                    <option value="accident">accident</option>
-                    <option value="hard_braking">hard_braking</option>
-                    <option value="button">button</option>
-                </select><br>
+        <!-- Кнопка "Выйти" -->
+        <div id="logoutSection" class="logout-section hidden">
+            <button class="logout-btn" onclick="logout()">Выйти</button>
+        </div>
 
-                <label for="timestampForm">Время события (ISO 8601):</label>
-                <input type="datetime-local" id="timestampForm" name="timestamp"><br>
-
-                <label for="descriptionForm">Описание:</label>
-                <input type="text" id="descriptionForm" name="description" required><br>
-
-                <label for="statusForm">Статус:</label>
-                <select id="statusForm" name="status" required>
+        <!-- Секции API (скрыты до входа) -->
+        <div id="apiSections" class="hidden">
+            <div class="section" id="incidentsSection">
+                <h2>Получить список инцидентов</h2>
+                <label for="statusFilter">Статус (необязательно): </label>
+                <select id="statusFilter">
+                    <option value="">Все</option>
                     <option value="new_status">new_status</option>
                     <option value="in_progress">in_progress</option>
                     <option value="resolved">resolved</option>
-                </select><br>
+                </select>
+                <button onclick="getIncidents()">Получить</button>
+            </div>
 
-                <label for="photoUrlsForm">URL фото (через запятую):</label>
-                <input type="text" id="photoUrlsForm" name="photoUrls"><br>
+            <div class="section" id="getIncidentSection">
+                <h2>Получить инцидент по ID</h2>
+                <input type="number" id="incidentIdGet" placeholder="ID инцидента">
+                <button onclick="getIncidentById()">Получить</button>
+            </div>
 
-                <button type="submit">Создать Alert</button>
-            </form>
-        </div>
+            <div class="section" id="assignSection">
+                <h2>Назначить инцидент пользователю</h2>
+                <input type="number" id="incidentIdAssign" placeholder="ID инцидента">
+                <input type="number" id="userIdAssign" placeholder="ID пользователя">
+                <button onclick="assignIncident()">Назначить</button>
+            </div>
 
-        <div class="section">
-            <h2>Получить список инцидентов</h2>
-            <label for="statusFilter">Статус (необязательно): </label>
-            <select id="statusFilter">
-                <option value="">Все</option>
-                <option value="new_status">new_status</option>
-                <option value="in_progress">in_progress</option>
-                <option value="resolved">resolved</option>
-            </select>
-            <button onclick="getIncidents()">Получить</button>
-        </div>
+            <div class="section" id="statusChangeSection">
+                <h2>Изменить статус инцидента</h2>
+                <input type="number" id="incidentIdStatus" placeholder="ID инцидента">
+                <select id="newStatus">
+                    <option value="new_status">new_status</option>
+                    <option value="in_progress">in_progress</option>
+                    <option value="resolved">resolved</option>
+                </select>
+                <button onclick="changeStatus()">Изменить статус</button>
+            </div>
 
-        <div class="section">
-            <h2>Получить инцидент по ID</h2>
-            <input type="number" id="incidentIdGet" placeholder="ID инцидента">
-            <button onclick="getIncidentById()">Получить</button>
-        </div>
+            <div class="section" id="addPhotoSection">
+                <h2>Добавить фото к инциденту</h2>
+                <input type="number" id="incidentIdPhoto" placeholder="ID инцидента">
+                <input type="text" id="photoUrl" placeholder="URL фото (например, https://example.com/photo.jpg)">
+                <button onclick="addPhoto()">Добавить фото</button>
+            </div>
 
-        <div class="section">
-            <h2>Назначить инцидент пользователю</h2>
-            <input type="number" id="incidentIdAssign" placeholder="ID инцидента">
-            <input type="number" id="userIdAssign" placeholder="ID пользователя">
-            <button onclick="assignIncident()">Назначить</button>
-        </div>
-
-        <div class="section">
-            <h2>Изменить статус инцидента</h2>
-            <input type="number" id="incidentIdStatus" placeholder="ID инцидента">
-            <select id="newStatus">
-                <option value="new_status">new_status</option>
-                <option value="in_progress">in_progress</option>
-                <option value="resolved">resolved</option>
-            </select>
-            <button onclick="changeStatus()">Изменить статус</button>
-        </div>
-
-        <div class="section">
-            <h2>Добавить фото к инциденту</h2>
-            <input type="number" id="incidentIdPhoto" placeholder="ID инцидента">
-            <input type="text" id="photoUrl" placeholder="URL фото (например, https://example.com/photo.jpg)">
-            <button onclick="addPhoto()">Добавить фото</button>
+            <div class="section" id="createIncidentSection">
+                <h2>Создать инцидент</h2>
+                <input type="number" id="createSensorId" placeholder="ID сенсора">
+                <select id="createEventType">
+                    <option value="accident">accident</option>
+                    <option value="hard_braking">hard_braking</option>
+                    <option value="button">button</option>
+                </select>
+                <input type="text" id="createDescription" placeholder="Описание">
+                <button onclick="createIncident()">Создать</button>
+            </div>
         </div>
 
         <div id="response"></div>
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8080/api/incidents'; // Замени, если другой URL
+        const API_BASE_URL = 'http://localhost:8080/api';
+        let accessToken = null;
 
         function displayResponse(data) {
             const responseDiv = document.getElementById('response');
             responseDiv.textContent = JSON.stringify(data, null, 2);
         }
 
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                displayResponse({ error: "Введите имя пользователя и пароль" });
+                return;
+            }
+
+            fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password }),
+                credentials: 'include'  // ← ВАЖНО: отправляем куки с запросом
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorJson => {
+                        throw new Error(`Ошибка: ${errorJson.message || response.statusText}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayResponse({ message: "Вход успешен", data: data });
+                
+                // Обновляем UI
+                document.getElementById('authSection').classList.add('hidden');
+                document.getElementById('logoutSection').classList.remove('hidden');
+                document.getElementById('apiSections').classList.remove('hidden');
+            })
+            .catch(error => {
+                displayResponse({ error: error.message });
+            });
+        }
+        
+        function register() {
+            const Username = document.getElementById('registerUsername').value;
+            const Password = document.getElementById('registerPassword').value;
+
+            if (!Username || !Password) {
+                displayResponse({ error: "Введите имя пользователя и пароль" });
+                return;
+            }
+
+            ResgisterRequest = {
+                username: Username,
+                password: Password
+            }
+
+            fetch(`${API_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(ResgisterRequest)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // Попробуй получить JSON ошибки
+                    return response.json().then(err => {
+                        throw new Error(`Server Error: ${err.message || response.statusText}`);
+                    }).catch(jsonError => {
+                        // Если JSON не удалось, например, сервер вернул HTML
+                        console.error("Failed to parse error response as JSON:", jsonError);
+                        throw new Error(`Server Error: ${response.status} ${response.statusText}. Check server logs.`);
+                    });
+                }
+                return response.text();
+            })
+            .then(message => {
+                displayResponse({ message: message });
+            })
+            .catch(error => {
+                displayResponse({ error: error.message, details: error });
+            });
+        }
+
+        function logout() {
+            // Очищаем токен
+            accessToken = null;
+            // Показываем форму, скрываем API
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('logoutSection').classList.add('hidden');
+            document.getElementById('apiSections').classList.add('hidden');
+            displayResponse({ message: "Вы вышли из системы" });
+        }
+
+        // --- Функции API (теперь используют accessToken) ---
         function getIncidents() {
+            if (!accessToken) {
+                displayResponse({ error: "Требуется аутентификация" });
+                return;
+            }
             const status = document.getElementById('statusFilter').value;
-            let url = API_BASE_URL;
+            let url = `${API_BASE_URL}/incidents`;
             if (status) {
                 url += `?status=${status}`;
             }
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => displayResponse(data))
-                .catch(error => displayResponse({ error: error.message }));
+            fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => displayResponse(data))
+            .catch(error => displayResponse({ error: error.message }));
         }
 
         function getIncidentById() {
+            if (!accessToken) {
+                displayResponse({ error: "Требуется аутентификация" });
+                return;
+            }
             const id = document.getElementById('incidentIdGet').value;
             if (!id) {
                 displayResponse({ error: "Введите ID инцидента" });
                 return;
             }
 
-            fetch(`${API_BASE_URL}/${id}`)
-                .then(response => response.json())
-                .then(data => displayResponse(data))
-                .catch(error => displayResponse({ error: error.message }));
+            fetch(`${API_BASE_URL}/incidents/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => displayResponse(data))
+            .catch(error => displayResponse({ error: error.message }));
         }
 
         function assignIncident() {
+            if (!accessToken) {
+                displayResponse({ error: "Требуется аутентификация" });
+                return;
+            }
             const incidentId = document.getElementById('incidentIdAssign').value;
             const userId = document.getElementById('userIdAssign').value;
             if (!incidentId || !userId) {
@@ -176,15 +316,22 @@
                 return;
             }
 
-            fetch(`${API_BASE_URL}/${incidentId}/assign?userId=${userId}`, {
-                method: 'PUT'
+            fetch(`${API_BASE_URL}/incidents/${incidentId}/assign?userId=${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             })
-                .then(response => response.json())
-                .then(data => displayResponse(data))
-                .catch(error => displayResponse({ error: error.message }));
+            .then(response => response.json())
+            .then(data => displayResponse(data))
+            .catch(error => displayResponse({ error: error.message }));
         }
 
         function changeStatus() {
+            if (!accessToken) {
+                displayResponse({ error: "Требуется аутентификация" });
+                return;
+            }
             const incidentId = document.getElementById('incidentIdStatus').value;
             const status = document.getElementById('newStatus').value;
             if (!incidentId || !status) {
@@ -192,15 +339,22 @@
                 return;
             }
 
-            fetch(`${API_BASE_URL}/${incidentId}/status_change?status=${status}`, {
-                method: 'PUT'
+            fetch(`${API_BASE_URL}/incidents/${incidentId}/status_change?status=${status}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             })
-                .then(response => response.json())
-                .then(data => displayResponse(data))
-                .catch(error => displayResponse({ error: error.message }));
+            .then(response => response.json())
+            .then(data => displayResponse(data))
+            .catch(error => displayResponse({ error: error.message }));
         }
 
         function addPhoto() {
+            if (!accessToken) {
+                displayResponse({ error: "Требуется аутентификация" });
+                return;
+            }
             const incidentId = document.getElementById('incidentIdPhoto').value;
             const photoUrl = document.getElementById('photoUrl').value;
             if (!incidentId || !photoUrl) {
@@ -208,51 +362,49 @@
                 return;
             }
 
-            fetch(`${API_BASE_URL}/${incidentId}/photos?photoUrl=${encodeURIComponent(photoUrl)}`, {
-                method: 'POST'
+            fetch(`${API_BASE_URL}/incidents/${incidentId}/photos?photoUrl=${encodeURIComponent(photoUrl)}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             })
-                .then(response => response.json())
-                .then(data => displayResponse(data))
-                .catch(error => displayResponse({ error: error.message }));
+            .then(response => response.json())
+            .then(data => displayResponse(data))
+            .catch(error => displayResponse({ error: error.message }));
         }
 
-                    // --- НОВАЯ ФУНКЦИЯ ---
-            document.getElementById('createAlertForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // Предотвращаем стандартную отправку формы
+        function createIncident() {
+            if (!accessToken) {
+                displayResponse({ error: "Требуется аутентификация" });
+                return;
+            }
+            const sensorId = document.getElementById('createSensorId').value;
+            const type = document.getElementById('createEventType').value;
+            const description = document.getElementById('createDescription').value;
 
-                const formData = new FormData(this);
+            if (!sensorId || !type || !description) {
+                displayResponse({ error: "Введите ID сенсора, тип и описание" });
+                return;
+            }
 
-                // Подготовим объект данных
-                const alertData = {
-                    sensor: { id: parseInt(formData.get('sensorId'), 10) }, // Предполагаем, что sensor - объект с id
-                    type: formData.get('type'), // Преобразуем в верхний регистр
-                    timestamp: formData.get('timestamp') ? new Date(formData.get('timestamp')).toISOString() : null, // Преобразуем в ISO строку
-                    description: formData.get('description'),
-                    status: formData.get('status'), // Преобразуем в верхний регистр
-                    photoUrls: formData.get('photoUrls') ? formData.get('photoUrls').split(',').map(url => url.trim()).filter(url => url) : [] // Преобразуем строку в массив
-                };
+            const requestData = {
+                sensorId: parseInt(sensorId, 10),
+                type: type.toUpperCase(),
+                description: description
+            };
 
-                // Отправим JSON в теле запроса
-                fetch(API_BASE_URL, { // Замени на правильный путь, если отличается
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(alertData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => Promise.reject(err));
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    displayResponse(data); // Отобразим ответ в существующем блоке
-                })
-                .catch(error => {
-                    displayResponse({ error: error.message, details: error });
-                });
-            });
+            fetch(`${API_BASE_URL}/incidents`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => displayResponse(data))
+            .catch(error => displayResponse({ error: error.message }));
+        }
     </script>
 </body>
 </html>

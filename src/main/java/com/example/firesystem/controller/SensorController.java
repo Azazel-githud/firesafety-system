@@ -18,8 +18,8 @@ public class SensorController {
     private final SensorService sensorService;
 
     @GetMapping
-    public List<SensorDto> getAllSensors() {
-        return sensorService.getSensors();
+    public ResponseEntity<List<SensorDto>> getAllSensors() {
+        return ResponseEntity.ok().body(sensorService.getSensors());
     }
 
     @GetMapping("/{id}")

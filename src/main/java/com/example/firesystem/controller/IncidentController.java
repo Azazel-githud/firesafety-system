@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,25 +24,22 @@ public class IncidentController {
 
     private final AlertService alertService;
 
-    // GET /api/incidents?status=new
+    @PreAuthorize("hasAuthority('SENSOR_READ')")
     @GetMapping
     public List<AlertDto> getIncidents(@RequestParam(required = false) StatusType status) {
         return alertService.getAlertsByStatus(status);
     }
 
-    // GET /api/incidents/{id}
     @GetMapping("/{id}")
     public ResponseEntity<AlertDto> getIncident(@PathVariable Long id) {
         return ResponseEntity.ok().body(alertService.getAlertById(id));
     }
 
-    // PUT /api/incidents/{id}/assign
     @PutMapping("/{id}/assign")
     public AlertDto assignIncident(@PathVariable Long id, @RequestParam Long userId) {
         return alertService.assignAlert(id, userId);
     }
 
-    // PUT /api/incidents/{id}/status_change
     @PutMapping("/{id}/status_change")
     public AlertDto changeIncidentStatus(@PathVariable Long id, @RequestParam StatusType status) {
         return alertService.changeStatus(id, status);
@@ -53,7 +51,6 @@ public class IncidentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newAlert);
     }
 
-    // POST /api/incidents/{id}/photos
     @PostMapping("/{id}/photos")
     public AlertDto addPhotoToIncident(@PathVariable Long id, @RequestParam String photoUrl) {
         return alertService.addPhotoToAlert(id, photoUrl);

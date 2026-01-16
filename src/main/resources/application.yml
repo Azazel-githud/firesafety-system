@@ -31,14 +31,18 @@ spring:
             ddl-auto: update
 
 jwt:
-  secret: "myVerySecretKey123456789012345678901234567890" # <-- ЗАМЕНИ НА СВОЙ КЛЮЧ, лучше сгенерированный
+  secret: "n8hkFK8e17SpmXpdeLJVn2NVUxt4NmCiEtnnMFsLB4C"
   access:
     duration:
-      minutes: 5
-      seconds: 300
+      minute: 5
+      second: 300
     cookie-name: access-token
   refresh:
     duration:
-      days: 7
-      seconds: 604800
+      day: 7
+      second: 604800
     cookie-name: refresh-token
+
+logging:
+  level:
+    org.springframework.security: DEBUG

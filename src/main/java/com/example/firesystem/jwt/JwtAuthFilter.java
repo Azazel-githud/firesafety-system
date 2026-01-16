@@ -16,35 +16,27 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    UserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
+
     @Value("${jwt.access.cookie-name}")
     private String accessCookieName;
-    private String token = "";
-
-    JwtAuthFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (accessCookieName.equals(cookie.getName())) {
-                    token = cookie.getValue();
-                }
-            }
-        } else {
-            token = null;
-        }
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
-        if (token == "" || !jwtTokenProvider.isValid(token)) {
+        final String token = extractTokenFromCookies(request);
+
+        if (token == null || !jwtTokenProvider.isValid(token)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -61,5 +53,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);
         filterChain.doFilter(request, response);
+    }
+
+    private String extractTokenFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (accessCookieName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

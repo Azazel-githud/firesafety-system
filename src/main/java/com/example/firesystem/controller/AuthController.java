@@ -1,36 +1,65 @@
 package com.example.firesystem.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.firesystem.dto.ChangePasswordRequestDto;
+import com.example.firesystem.dto.LoginRequestDto;
+import com.example.firesystem.dto.LoginResponseDto;
+import com.example.firesystem.dto.RegisterRequest;
+import com.example.firesystem.dto.UserLoggedDto;
+import com.example.firesystem.service.AuthService;
 
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("auth/")
-@AllArgsConstructor
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "This is unprotected page";
+
+    private final AuthService authService;
+
+    @PostMapping("/login")
+    @Transactional
+    public ResponseEntity<LoginResponseDto> login(
+            @RequestBody LoginRequestDto request,
+            @CookieValue(name = "access-token", required = false) String accessToken,
+            @CookieValue(name = "refresh-token", required = false) String refreshToken) {
+
+        return authService.login(request, accessToken, refreshToken);
     }
 
-    @GetMapping("/users")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String pageForUser() {
-        return "This is page for only users";
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponseDto> refresh(
+            @CookieValue(name = "refresh-token") String refreshToken) {
+
+        return authService.refresh(refreshToken);
     }
 
-    @GetMapping("/admins")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String pageForAdmin() {
-        return "This is page for only admins";
+    @PostMapping("/logout")
+    public ResponseEntity<LoginResponseDto> logout(
+            @CookieValue(name = "access-token", required = false) String accessToken) {
+
+        return authService.logout(accessToken);
     }
 
-    @GetMapping("/all")
-    public String pageForAll() {
-        return "This is page for all employees";
+    @GetMapping("/info")
+    public ResponseEntity<UserLoggedDto> info() {
+        return ResponseEntity.ok(authService.info());
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<LoginResponseDto> changePassword(
+            @RequestBody ChangePasswordRequestDto request) {
+
+        return authService.changePassword(request);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(
+            @RequestBody RegisterRequest request) {
+
+        return ResponseEntity.ok(authService.register(request));
     }
 }

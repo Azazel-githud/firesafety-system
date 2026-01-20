@@ -10,19 +10,21 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
@@ -31,14 +33,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String username;
 
-    @NotBlank
     private String password;
 
     @ManyToOne
     private Role role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Token> tokens;
+
+    private Long telegramChatId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -48,7 +53,4 @@ public class User implements UserDetails {
 
         return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
     }
-
-    @OneToMany(mappedBy = "user")
-    private Set<Token> tokens;
 }

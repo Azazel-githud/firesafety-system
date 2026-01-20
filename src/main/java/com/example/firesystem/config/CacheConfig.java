@@ -15,7 +15,13 @@ public class CacheConfig {
     @Bean
     CacheManager cacheManager() {
         SimpleCacheManager scm = new SimpleCacheManager();
-        scm.setCaches(Arrays.asList(new ConcurrentMapCache("products"), new ConcurrentMapCache("product")));
+        scm.setCaches(Arrays.asList(
+                new ConcurrentMapCache("sensors"),
+                new ConcurrentMapCache("sensor"),
+                new ConcurrentMapCache("alerts"),
+                new ConcurrentMapCache("alert"),
+                new ConcurrentMapCache("alertsByStatus"),
+                new ConcurrentMapCache("alertsBySensor")));
         return scm;
     }
 }

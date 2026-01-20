@@ -2,8 +2,8 @@ package com.example.firesystem.jwt;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,12 +12,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AuthenticationFilterImpl extends UsernamePasswordAuthenticationFilter {
-    public final AuthenticationManager authManager;
+    private final AuthenticationManager authenticationManager;
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-        return authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(req.getParameter("username"), req.getParameter("password")));
+        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                request.getParameter("username"), request.getParameter("password")));
     }
 }

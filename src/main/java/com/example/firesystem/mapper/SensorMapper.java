@@ -1,12 +1,12 @@
 package com.example.firesystem.mapper;
 
-import com.example.firesystem.dto.SensorDto;
+import com.example.firesystem.dto.SensorResponseDto;
 import com.example.firesystem.model.Sensor;
 
 public class SensorMapper {
-    public static SensorDto sensorToSensorDto(Sensor sensor) {
+    public static SensorResponseDto sensorToSensorDto(Sensor sensor) {
         Long userId = (sensor.getAssignedTo() != null) ? sensor.getAssignedTo().getId() : null;
-        return new SensorDto(
+        return new SensorResponseDto(
                 sensor.getId(),
                 sensor.getModel(),
                 sensor.getLocation(),

@@ -29,6 +29,9 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:
             ddl-auto: update
+        open-in-view: false
+    mvc:
+        static-path-pattern: /**
 
 jwt:
   secret: "n8hkFK8e17SpmXpdeLJVn2NVUxt4NmCiEtnnMFsLB4C"

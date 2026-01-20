@@ -2,7 +2,6 @@ package com.example.firesystem.service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,30 +20,27 @@ import org.springframework.stereotype.Service;
 import com.example.firesystem.dto.ChangePasswordRequestDto;
 import com.example.firesystem.dto.LoginRequestDto;
 import com.example.firesystem.dto.LoginResponseDto;
-import com.example.firesystem.dto.RegisterRequest;
 import com.example.firesystem.dto.UserLoggedDto;
-import com.example.firesystem.exception.InvalidInputException;
 import com.example.firesystem.jwt.JwtTokenProvider;
 import com.example.firesystem.mapper.UserMapper;
-import com.example.firesystem.model.Role;
 import com.example.firesystem.model.Token;
 import com.example.firesystem.model.User;
-import com.example.firesystem.repository.RoleRepository;
 import com.example.firesystem.repository.TokenRepository;
 import com.example.firesystem.util.CookieUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthService {
     private final TokenRepository tokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
-    private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
 
     @Value("${jwt.access.duration.minute}")
     private long accessDurationMin;
@@ -66,12 +62,15 @@ public class AuthService {
     }
 
     private void revokeAllTokens(User user) {
+        log.debug("Отзыв всех токенов для пользователя: {}", user.getUsername());
         Set<Token> tokens = user.getTokens();
 
         tokens.forEach(token -> {
-            if (token.getExpiringDate().isBefore(LocalDateTime.now()))
+            if (token.getExpiringDate().isBefore(LocalDateTime.now())) {
+                log.debug("Удаление просроченного токена: {}", token.getId());
                 tokenRepository.delete(token);
-            else if (!token.isDisabled()) {
+            } else if (!token.isDisabled()) {
+                log.debug("Отключение активного токена: {}", token.getId());
                 token.setDisabled(true);
                 tokenRepository.save(token);
             }
@@ -79,46 +78,58 @@ public class AuthService {
     }
 
     public ResponseEntity<LoginResponseDto> login(LoginRequestDto request, String access, String refresh) {
+        log.info("Попытка входа пользователя: {}", request.username());
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.username(), request.password()));
+        log.debug("Аутентификация успешна для пользователя: {}", request.username());
+
         User user = userService.getUserByUsername(request.username());
 
         boolean accessValid = jwtTokenProvider.isValid(access);
         boolean refreshValid = jwtTokenProvider.isValid(refresh);
+        log.debug("Проверка токенов: accessValid={}, refreshValid={}", accessValid, refreshValid);
 
         HttpHeaders headers = new HttpHeaders();
 
         revokeAllTokens(user);
 
         if (!accessValid) {
-            Token newAccess = jwtTokenProvider.generateAccessToken(Map.of("role", user.getRole().getAuthority()),
+            log.debug("Создание нового access токена для пользователя: {}", user.getUsername());
+            Token newAccess = jwtTokenProvider.generatedAccessToken(Map.of("role", user.getRole().getAuthority()),
                     accessDurationMin, ChronoUnit.MINUTES, user);
-
             newAccess.setUser(user);
             addAccessTokenCookie(headers, newAccess);
             tokenRepository.save(newAccess);
         }
 
         if (!refreshValid || accessValid) {
-            Token newRefresh = jwtTokenProvider.generateRefreshToken(refreshDurationDate, ChronoUnit.MINUTES, user);
-
+            log.debug("Создание нового refresh токена для пользователя: {}", user.getUsername());
+            Token newRefresh = jwtTokenProvider.generatedRefreshToken(refreshDurationDate, ChronoUnit.MINUTES, user);
             newRefresh.setUser(user);
             addRefreshTokenCookie(headers, newRefresh);
             tokenRepository.save(newRefresh);
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("Пользователь {} успешно вошел в систему. Роль: {}", user.getUsername(), user.getRole().getName());
+
         return ResponseEntity.ok().headers(headers).body(new LoginResponseDto(true, user.getRole().getName()));
     }
 
     public ResponseEntity<LoginResponseDto> refresh(String refreshToken) {
+        log.info("Обновление токена доступа");
+
         if (!jwtTokenProvider.isValid(refreshToken)) {
-            throw new RuntimeException("token is invalid");
+            log.error("Предоставлен невалидный refresh токен");
+            throw new RuntimeException("Invalid token provided");
         }
 
-        User user = userService.getUserByUsername(jwtTokenProvider.getUsername(refreshToken));
+        String username = jwtTokenProvider.getUsername(refreshToken);
+        log.debug("Получение пользователя по имени из токена: {}", username);
 
-        Token newAccess = jwtTokenProvider.generateAccessToken(Map.of("role", user.getRole().getAuthority()),
+        User user = userService.getUserByUsername(username);
+        Token newAccess = jwtTokenProvider.generatedAccessToken(Map.of("role", user.getRole().getAuthority()),
                 accessDurationMin, ChronoUnit.MINUTES, user);
 
         newAccess.setUser(user);
@@ -126,53 +137,73 @@ public class AuthService {
         addAccessTokenCookie(headers, newAccess);
         tokenRepository.save(newAccess);
 
+        log.info("Access токен успешно обновлен для пользователя: {}", username);
+
         return ResponseEntity.ok().headers(headers).body(new LoginResponseDto(true, user.getRole().getName()));
     }
 
     public ResponseEntity<LoginResponseDto> logout(String accessToken) {
-        SecurityContextHolder.clearContext();
+        log.info("Запрос на выход из системы");
 
-        User user = userService.getUserByUsername(jwtTokenProvider.getUsername(accessToken));
+        SecurityContextHolder.clearContext();
+        String username = jwtTokenProvider.getUsername(accessToken);
+        log.debug("Получение пользователя для выхода: {}", username);
+
+        User user = userService.getUserByUsername(username);
         revokeAllTokens(user);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessCookie().toString());
         headers.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshCookie().toString());
+
+        log.info("Пользователь {} успешно вышел из системы", username);
 
         return ResponseEntity.ok().headers(headers).body(new LoginResponseDto(false, null));
     }
 
     public UserLoggedDto info() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.debug("Получение информации о текущем пользователе");
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof AnonymousAuthenticationToken) {
+            log.error("Попытка получения информации без аутентификации");
             throw new RuntimeException("User is not authenticated");
         }
 
         User user = userService.getUserByUsername(authentication.getName());
+        log.debug("Информация о пользователе получена: {}", user.getUsername());
 
         return UserMapper.userToUserLoggedDto(user);
     }
 
     public ResponseEntity<LoginResponseDto> changePassword(ChangePasswordRequestDto request) {
+        log.info("Запрос на смену пароля");
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication instanceof AnonymousAuthenticationToken) {
+            log.error("Попытка смены пароля без аутентификации");
             throw new RuntimeException("User is not authenticated");
         }
 
-        User user = userService.getUserByUsername(authentication.getName());
+        String username = authentication.getName();
+        User user = userService.getUserByUsername(username);
 
+        log.debug("Проверка старого пароля для пользователя: {}", username);
         if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Current password is invalid");
+            log.error("Неверный старый пароль для пользователя: {}", username);
+            throw new BadCredentialsException("Old password is invalid");
         }
-        if (!request.newPassword().matches(request.newPasswordAgain())) {
+
+        log.debug("Проверка совпадения новых паролей для пользователя: {}", username);
+        if (!request.newPassword().equals(request.newPasswordAgain())) {
+            log.error("Новые пароли не совпадают для пользователя: {}", username);
             throw new BadCredentialsException("New passwords don't match each other");
         }
 
+        log.info("Смена пароля для пользователя: {}", username);
         user.setPassword(passwordEncoder.encode(request.newPassword()));
         userService.saveUser(user);
-
         revokeAllTokens(user);
         SecurityContextHolder.clearContext();
 
@@ -180,20 +211,8 @@ public class AuthService {
         headers.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessCookie().toString());
         headers.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshCookie().toString());
 
+        log.info("Пароль успешно изменен для пользователя: {}", username);
+
         return ResponseEntity.ok().headers(headers).body(new LoginResponseDto(false, null));
-    }
-
-    public String register(RegisterRequest request) {
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new InvalidInputException("Default role 'USER' not found"));
-
-        User user = new User();
-        user.setUsername(request.username());
-
-        user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(userRole);
-
-        userService.saveUser(user);
-        return "User registered successfully";
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.firesystem.jwt.JwtAuthEntryPoint;
 import com.example.firesystem.jwt.JwtAuthFilter;
@@ -29,6 +28,20 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    private static final String[] ALLOWED_URLS = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui",
+            "/index.html",
+            "/",
+            "/css/**",
+            "/js/**",
+            "/images/**",
+            "/favicon.ico",
+            "/static/**",
+            "/webjars/**"
+    };
+
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
@@ -42,14 +55,17 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/", "/index.html", "/static/**", "/css/**", "/js/**", "/images/**").permitAll();
-            auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
-            auth.requestMatchers("/api/auth/login", "/api/auth/refresh", "/api/auth/register").permitAll();
-            auth.anyRequest().authenticated();
+            // auth.requestMatchers(ALLOWED_URLS).permitAll();
+            // auth.requestMatchers("/api/auth/login", "/api/auth/refresh",
+            // "/api/auth/register").permitAll();
+            // auth.requestMatchers("/").permitAll(); // для теста, потом уберешь
+            // auth.anyRequest().authenticated();
+            auth.anyRequest().permitAll(); // разрешает все, удали после тестов
         });
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint));
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        // http.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint));
+        // http.addFilterBefore(jwtAuthFilter,
+        // UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

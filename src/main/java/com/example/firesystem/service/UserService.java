@@ -9,30 +9,52 @@ import com.example.firesystem.mapper.UserMapper;
 import com.example.firesystem.model.User;
 import com.example.firesystem.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
     public List<UserDto> getUsers() {
-        return userRepository.findAll().stream().map(UserMapper::userToUserDto).toList();
+        log.info("Получение списка всех пользователей");
+        List<UserDto> users = userRepository.findAll().stream()
+                .map(UserMapper::userToUserDto)
+                .toList();
+        log.debug("Найдено {} пользователей", users.size());
+        return users;
     }
 
     public UserDto getUserById(Long id) {
+        log.info("Получение пользователя по ID: {}", id);
         User user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User with id " + id + " not found"));
+                () -> {
+                    log.error("Пользователь с ID {} не найден", id);
+                    return new ResourceNotFoundException("User with id " + id + " not found");
+                });
+        log.debug("Пользователь с ID {} найден: {}", id, user.getUsername());
         return UserMapper.userToUserDto(user);
     }
 
     public User getUserByUsername(String name) {
+        log.info("Получение пользователя по имени пользователя: {}", name);
         User user = userRepository.findByUsername(name).orElseThrow(
-                () -> new ResourceNotFoundException("User with username " + name + " not found"));
+                () -> {
+                    log.error("Пользователь с именем {} не найден", name);
+                    return new ResourceNotFoundException("User with username " + name + " not found");
+                });
+        log.debug("Пользователь с именем {} найден: ID={}", name, user.getId());
         return user;
     }
 
+    @Transactional
     public User saveUser(User user) {
-        return userRepository.save(user);
+        log.info("Сохранение пользователя: {}", user.getUsername());
+        User savedUser = userRepository.save(user);
+        log.debug("Пользователь сохранен с ID: {}", savedUser.getId());
+        return savedUser;
     }
 }

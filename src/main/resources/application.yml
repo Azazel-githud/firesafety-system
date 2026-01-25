@@ -32,7 +32,7 @@ spring:
         open-in-view: false
     mvc:
         static-path-pattern: /**
-
+---
 jwt:
   secret: "n8hkFK8e17SpmXpdeLJVn2NVUxt4NmCiEtnnMFsLB4C"
   access:
@@ -45,7 +45,51 @@ jwt:
       day: 7
       second: 604800
     cookie-name: refresh-token
-
+---
 logging:
-  level:
-    org.springframework.security: DEBUG
+    level:
+        root: INFO
+        com.example.fyresystem: DEBUG
+        org.springframework: WARN 
+        org.hibernate: INFO  
+    file:
+        name: logs/fyresystem.log
+        max-size: 10MB
+        max-history: 50
+    pattern:
+        console: "%d{yyyy-MM-dd HH:mm:ss} - %cyan(%logger{36}) - %level - %msg%n"
+        file: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %level - %msg%n"
+---
+telegram:
+    bot:
+        name: Fire_SYS_tem_Bot
+        token: 8389445920:AAHgfhkjiLhIMF1TMil9g8cuMp27YVi9c7c
+        chat-id: 1068170703
+---
+spring:
+  servlet:
+    multipart:
+      location: /uploads
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
+---
+springdoc:
+    api-docs:
+        path: /v3/api-docs
+        enabled: true
+    swagger-ui:
+        path: /swagger-ui
+        enabled: true
+        tags-sorter: alpha
+        operations-sorter: method
+        display-request-duration: true
+        default-model-expand-depth: 2
+        default-models-expand-depth: 2
+        try-it-out-enabled: true
+    show-actuator: false
+    packages-to-scan: com.example.firesystem.controller
+---
+reports:
+  save:
+    path: reports/

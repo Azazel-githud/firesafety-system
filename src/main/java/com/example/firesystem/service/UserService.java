@@ -9,6 +9,7 @@ import com.example.firesystem.mapper.UserMapper;
 import com.example.firesystem.model.User;
 import com.example.firesystem.repository.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,5 +57,14 @@ public class UserService {
         User savedUser = userRepository.save(user);
         log.debug("Пользователь сохранен с ID: {}", savedUser.getId());
         return savedUser;
+    }
+
+    @Transactional
+    public void updateTelegramId(Long userId, Long telegramChatId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        user.setTelegramChatId(telegramChatId);
+        userRepository.save(user);
     }
 }

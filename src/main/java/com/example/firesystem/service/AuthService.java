@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.firesystem.bot.FireAlertBot;
 import com.example.firesystem.dto.ChangePasswordRequestDto;
 import com.example.firesystem.dto.LoginRequestDto;
 import com.example.firesystem.dto.LoginResponseDto;
@@ -41,6 +42,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final FireAlertBot alertBot;
 
     @Value("${jwt.access.duration.minute}")
     private long accessDurationMin;
@@ -109,6 +111,12 @@ public class AuthService {
             newRefresh.setUser(user);
             addRefreshTokenCookie(headers, newRefresh);
             tokenRepository.save(newRefresh);
+        }
+
+        try {
+            alertBot.sendToAdmin("Пользователь " + user.getUsername() + " успешно вошел!");
+        } catch (Exception e) {
+            log.error("Не удалось отправить сообщение админу: " + e);
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

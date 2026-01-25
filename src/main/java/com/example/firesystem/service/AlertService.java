@@ -7,6 +7,7 @@ import com.example.firesystem.exception.ResourceNotFoundException;
 import com.example.firesystem.mapper.AlertMapper;
 import com.example.firesystem.model.Alert;
 import com.example.firesystem.repository.AlertRepository;
+import com.example.firesystem.repository.SensorRepository;
 import com.example.firesystem.model.User;
 import com.example.firesystem.repository.UserRepository;
 
@@ -29,6 +30,7 @@ public class AlertService {
 
         private final AlertRepository alertRepository;
         private final UserRepository userRepository;
+        private final SensorRepository sensorRepository;
 
         @Cacheable(value = "alerts", key = "'allAlerts'")
         public List<AlertDto> getAllAlerts() {
@@ -76,6 +78,17 @@ public class AlertService {
                 alert.setDescription(alertRequestDto.description());
                 alert.setStatus(alertRequestDto.status() != null ? alertRequestDto.status() : StatusType.new_status);
                 alert.setPhotoUrls(alertRequestDto.photoUrl());
+
+                if (alertRequestDto.sensorId() != null) {
+                        alert.setSensor(sensorRepository.findById(alertRequestDto.sensorId())
+                                        .orElseThrow(() -> {
+                                                log.error("Сенсор с ID {} не найден при создании оповещения",
+                                                                alertRequestDto.sensorId());
+                                                return new ResourceNotFoundException("Сенсор с ID "
+                                                                + alertRequestDto.sensorId()
+                                                                + " не найден при создании оповещения");
+                                        }));
+                }
 
                 if (alertRequestDto.userId() != null) {
                         alert.setAssignedTo(userRepository.findById(alertRequestDto.userId())

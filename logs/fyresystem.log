@@ -1,0 +1,207 @@
+2026-01-25 10:39:11 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Shutdown initiated...
+2026-01-25 10:39:11 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Shutdown completed.
+2026-01-25 10:39:12 - c.e.f.FiresafetySystemApplication - INFO - Starting FiresafetySystemApplication v0.1 using Java 17.0.12 with PID 33000 (C:\school\КППО\firesafety-system\target\classes started by ildar in C:\school\КППО\firesafety-system)
+2026-01-25 10:39:12 - c.e.f.FiresafetySystemApplication - INFO - The following 1 profile is active: "dev"
+2026-01-25 10:39:14 - o.a.catalina.core.StandardService - INFO - Starting service [Tomcat]
+2026-01-25 10:39:14 - o.a.catalina.core.StandardEngine - INFO - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-01-25 10:39:14 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring embedded WebApplicationContext
+2026-01-25 10:39:14 - o.h.jpa.internal.util.LogHelper - INFO - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-25 10:39:14 - o.h.c.i.RegionFactoryInitiator - INFO - HHH000026: Second-level cache disabled
+2026-01-25 10:39:14 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Starting...
+2026-01-25 10:39:14 - com.zaxxer.hikari.pool.HikariPool - INFO - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@e4dd5be
+2026-01-25 10:39:14 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Start completed.
+2026-01-25 10:39:14 - org.hibernate.orm.deprecation - WARN - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-25 10:39:14 - o.hibernate.orm.connections.pooling - INFO - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-25 10:39:14 - o.h.e.t.j.p.i.JtaPlatformInitiator - INFO - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-25 10:39:16 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:39:16 - c.e.f.FiresafetySystemApplication - INFO - Started FiresafetySystemApplication in 4.141 seconds (process running for 39986.005)
+2026-01-25 10:39:19 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:39:20 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:39:24 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:39:24 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Shutdown initiated...
+2026-01-25 10:39:24 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Shutdown completed.
+2026-01-25 10:39:24 - c.e.f.FiresafetySystemApplication - INFO - Starting FiresafetySystemApplication v0.1 using Java 17.0.12 with PID 33000 (C:\school\КППО\firesafety-system\target\classes started by ildar in C:\school\КППО\firesafety-system)
+2026-01-25 10:39:24 - c.e.f.FiresafetySystemApplication - INFO - The following 1 profile is active: "dev"
+2026-01-25 10:39:24 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:39:25 - o.a.catalina.core.StandardService - INFO - Starting service [Tomcat]
+2026-01-25 10:39:25 - o.a.catalina.core.StandardEngine - INFO - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-01-25 10:39:25 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring embedded WebApplicationContext
+2026-01-25 10:39:25 - o.h.jpa.internal.util.LogHelper - INFO - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-25 10:39:25 - o.h.c.i.RegionFactoryInitiator - INFO - HHH000026: Second-level cache disabled
+2026-01-25 10:39:25 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-3 - Starting...
+2026-01-25 10:39:25 - com.zaxxer.hikari.pool.HikariPool - INFO - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@b8c4d51
+2026-01-25 10:39:25 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-3 - Start completed.
+2026-01-25 10:39:25 - org.hibernate.orm.deprecation - WARN - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-25 10:39:25 - o.hibernate.orm.connections.pooling - INFO - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-3)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-25 10:39:25 - o.h.e.t.j.p.i.JtaPlatformInitiator - INFO - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-25 10:39:27 - c.e.f.FiresafetySystemApplication - INFO - Started FiresafetySystemApplication in 2.633 seconds (process running for 39996.347)
+2026-01-25 10:39:28 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:40:22 - c.e.f.FiresafetySystemApplication - INFO - Starting FiresafetySystemApplication v0.1 using Java 17.0.12 with PID 9588 (C:\school\КППО\firesafety-system\target\classes started by ildar in C:\school\КППО\firesafety-system)
+2026-01-25 10:40:22 - c.e.f.FiresafetySystemApplication - INFO - The following 1 profile is active: "dev"
+2026-01-25 10:40:26 - o.a.catalina.core.StandardService - INFO - Starting service [Tomcat]
+2026-01-25 10:40:26 - o.a.catalina.core.StandardEngine - INFO - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-01-25 10:40:26 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring embedded WebApplicationContext
+2026-01-25 10:40:26 - o.h.jpa.internal.util.LogHelper - INFO - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-25 10:40:26 - org.hibernate.Version - INFO - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-01-25 10:40:27 - o.h.c.i.RegionFactoryInitiator - INFO - HHH000026: Second-level cache disabled
+2026-01-25 10:40:27 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Starting...
+2026-01-25 10:40:27 - com.zaxxer.hikari.pool.HikariPool - INFO - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4b858368
+2026-01-25 10:40:27 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Start completed.
+2026-01-25 10:40:27 - org.hibernate.orm.deprecation - WARN - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-25 10:40:27 - o.hibernate.orm.connections.pooling - INFO - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-25 10:40:29 - o.h.e.t.j.p.i.JtaPlatformInitiator - INFO - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-25 10:40:33 - c.e.f.FiresafetySystemApplication - INFO - Started FiresafetySystemApplication in 11.306 seconds (process running for 11.891)
+2026-01-25 10:40:36 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-25 10:40:37 - o.s.api.AbstractOpenApiResource - INFO - Init duration for springdoc-openapi is: 569 ms
+2026-01-25 10:40:47 - c.e.firesystem.service.AuthService - INFO - Попытка входа пользователя: azat
+2026-01-25 10:40:48 - c.e.firesystem.service.UserService - INFO - Получение пользователя по имени пользователя: azat
+2026-01-25 10:40:48 - c.e.firesystem.service.AuthService - INFO - Пользователь azat успешно вошел в систему. Роль: ADMIN
+2026-01-25 10:42:00 - c.e.f.service.PdfReportService - INFO - Генерация PDF отчета для Alert #8
+2026-01-25 10:42:00 - c.e.f.service.PdfReportService - INFO - PDF отчет для Alert #8 сгенерирован (1204 байт)
+2026-01-25 10:42:00 - c.e.f.service.PdfReportService - INFO - Создана директория для отчетов: C:\reports
+2026-01-25 10:42:00 - c.e.f.service.PdfReportService - INFO - PDF отчет сохранен на диск: C:\reports\alert_report_8_20260125_104200.pdf
+2026-01-25 10:43:54 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Shutdown initiated...
+2026-01-25 10:43:54 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Shutdown completed.
+2026-01-25 10:43:54 - c.e.f.FiresafetySystemApplication - INFO - Starting FiresafetySystemApplication v0.1 using Java 17.0.12 with PID 9588 (C:\school\КППО\firesafety-system\target\classes started by ildar in C:\school\КППО\firesafety-system)
+2026-01-25 10:43:54 - c.e.f.FiresafetySystemApplication - INFO - The following 1 profile is active: "dev"
+2026-01-25 10:43:55 - o.a.catalina.core.StandardService - INFO - Starting service [Tomcat]
+2026-01-25 10:43:55 - o.a.catalina.core.StandardEngine - INFO - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-01-25 10:43:55 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring embedded WebApplicationContext
+2026-01-25 10:43:55 - o.h.jpa.internal.util.LogHelper - INFO - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-25 10:43:55 - o.h.c.i.RegionFactoryInitiator - INFO - HHH000026: Second-level cache disabled
+2026-01-25 10:43:55 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Starting...
+2026-01-25 10:43:56 - com.zaxxer.hikari.pool.HikariPool - INFO - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@34a336d4
+2026-01-25 10:43:56 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Start completed.
+2026-01-25 10:43:56 - org.hibernate.orm.deprecation - WARN - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-25 10:43:56 - o.hibernate.orm.connections.pooling - INFO - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-25 10:43:56 - o.h.e.t.j.p.i.JtaPlatformInitiator - INFO - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-25 10:43:57 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:43:57 - c.e.f.FiresafetySystemApplication - INFO - Started FiresafetySystemApplication in 3.119 seconds (process running for 216.235)
+2026-01-25 10:44:07 - c.e.f.FiresafetySystemApplication - INFO - Starting FiresafetySystemApplication v0.1 using Java 17.0.12 with PID 244 (C:\school\КППО\firesafety-system\target\classes started by ildar in C:\school\КППО\firesafety-system)
+2026-01-25 10:44:07 - c.e.f.FiresafetySystemApplication - INFO - The following 1 profile is active: "dev"
+2026-01-25 10:44:10 - o.a.catalina.core.StandardService - INFO - Starting service [Tomcat]
+2026-01-25 10:44:10 - o.a.catalina.core.StandardEngine - INFO - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-01-25 10:44:10 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring embedded WebApplicationContext
+2026-01-25 10:44:11 - o.h.jpa.internal.util.LogHelper - INFO - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-25 10:44:11 - org.hibernate.Version - INFO - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-01-25 10:44:11 - o.h.c.i.RegionFactoryInitiator - INFO - HHH000026: Second-level cache disabled
+2026-01-25 10:44:11 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Starting...
+2026-01-25 10:44:12 - com.zaxxer.hikari.pool.HikariPool - INFO - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2cbd2c2b
+2026-01-25 10:44:12 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Start completed.
+2026-01-25 10:44:12 - org.hibernate.orm.deprecation - WARN - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-25 10:44:12 - o.hibernate.orm.connections.pooling - INFO - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-25 10:44:13 - o.h.e.t.j.p.i.JtaPlatformInitiator - INFO - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-25 10:44:17 - c.e.f.FiresafetySystemApplication - INFO - Started FiresafetySystemApplication in 10.617 seconds (process running for 11.167)
+2026-01-25 10:44:22 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-25 10:44:24 - o.s.api.AbstractOpenApiResource - INFO - Init duration for springdoc-openapi is: 535 ms
+2026-01-25 10:44:28 - c.e.f.service.PdfReportService - INFO - Генерация PDF отчета для Alert #8
+2026-01-25 10:44:28 - c.e.f.service.PdfReportService - INFO - PDF отчет для Alert #8 сгенерирован (1204 байт)
+2026-01-25 10:44:28 - c.e.f.service.PdfReportService - INFO - Создана директория для отчетов: C:\school\КППО\firesafety-system\reports
+2026-01-25 10:44:28 - c.e.f.service.PdfReportService - INFO - PDF отчет сохранен на диск: C:\school\КППО\firesafety-system\reports\alert_report_8_20260125_104428.pdf
+2026-01-25 10:49:37 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Shutdown initiated...
+2026-01-25 10:49:37 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-1 - Shutdown completed.
+2026-01-25 10:49:37 - c.e.f.FiresafetySystemApplication - INFO - Starting FiresafetySystemApplication v0.1 using Java 17.0.12 with PID 244 (C:\school\КППО\firesafety-system\target\classes started by ildar in C:\school\КППО\firesafety-system)
+2026-01-25 10:49:37 - c.e.f.FiresafetySystemApplication - INFO - The following 1 profile is active: "dev"
+2026-01-25 10:49:39 - o.a.catalina.core.StandardService - INFO - Starting service [Tomcat]
+2026-01-25 10:49:39 - o.a.catalina.core.StandardEngine - INFO - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-01-25 10:49:39 - o.a.c.c.C.[Tomcat].[localhost].[/] - INFO - Initializing Spring embedded WebApplicationContext
+2026-01-25 10:49:39 - o.h.jpa.internal.util.LogHelper - INFO - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-25 10:49:39 - o.h.c.i.RegionFactoryInitiator - INFO - HHH000026: Second-level cache disabled
+2026-01-25 10:49:39 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Starting...
+2026-01-25 10:49:39 - com.zaxxer.hikari.pool.HikariPool - INFO - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@62459abb
+2026-01-25 10:49:39 - com.zaxxer.hikari.HikariDataSource - INFO - HikariPool-2 - Start completed.
+2026-01-25 10:49:39 - org.hibernate.orm.deprecation - WARN - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-25 10:49:39 - o.hibernate.orm.connections.pooling - INFO - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-25 10:49:39 - o.h.e.t.j.p.i.JtaPlatformInitiator - INFO - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-25 10:49:41 - o.t.t.u.DefaultBotSession - ERROR - Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:54) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod.deserializeResponseArray(PartialBotApiMethod.java:39) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.meta.api.methods.updates.GetUpdates.deserializeResponse(GetUpdates.java:86) ~[telegrambots-meta-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.getUpdatesFromServer(DefaultBotSession.java:258) ~[telegrambots-6.9.7.1.jar:na]
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$ReaderThread.run(DefaultBotSession.java:188) ~[telegrambots-6.9.7.1.jar:na]
+2026-01-25 10:49:41 - c.e.f.FiresafetySystemApplication - INFO - Started FiresafetySystemApplication in 3.444 seconds (process running for 334.772)

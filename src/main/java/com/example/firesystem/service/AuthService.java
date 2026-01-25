@@ -94,7 +94,7 @@ public class AuthService {
 
         HttpHeaders headers = new HttpHeaders();
 
-        revokeAllTokens(user);
+        // revokeAllTokens(user);
 
         if (!accessValid) {
             log.debug("Создание нового access токена для пользователя: {}", user.getUsername());

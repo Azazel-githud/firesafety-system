@@ -31,6 +31,6 @@ public class Permission implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return String.format("%s:%s", resource.toUpperCase(), operation.toUpperCase());
+        return String.format("%s_%s", resource.toUpperCase(), operation.toUpperCase());
     }
 }

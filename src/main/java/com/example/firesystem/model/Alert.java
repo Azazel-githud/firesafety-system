@@ -29,7 +29,7 @@ public class Alert {
     @Enumerated(EnumType.STRING)
     private StatusType status; // "new_status, "in_progress", "resolved"
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> photoUrls; // Список URL-адресов фото
 
     @ManyToOne

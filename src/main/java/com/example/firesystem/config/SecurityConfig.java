@@ -12,12 +12,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.firesystem.jwt.JwtAuthEntryPoint;
 import com.example.firesystem.jwt.JwtAuthFilter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-ui",
+            "/error"
     };
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -47,17 +51,16 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> {
-            // auth.requestMatchers(ALLOWED_URLS).permitAll();
-            // auth.requestMatchers("/api/auth/login", "/api/auth/refresh",
-            // "/api/auth/register").permitAll();
-            // auth.requestMatchers("/").permitAll(); // для теста, потом уберешь
-            // auth.anyRequest().authenticated();
-            auth.anyRequest().permitAll(); // разрешает все, удали после тестов
+            auth.requestMatchers(ALLOWED_URLS).permitAll();
+            auth.requestMatchers("/api/auth/login", "/api/auth/refresh",
+                    "/api/auth/register").permitAll();
+            auth.anyRequest().authenticated();
+            log.info("Security rules configured: /api/auth/login is PERMIT_ALL");
         });
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        // http.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint));
-        // http.addFilterBefore(jwtAuthFilter,
-        // UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint));
+        http.addFilterBefore(jwtAuthFilter,
+                UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

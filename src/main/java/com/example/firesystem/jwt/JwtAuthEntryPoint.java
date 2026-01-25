@@ -16,13 +16,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
+
+        log.warn("Authentication required for path: {} - {}",
+                request.getServletPath(), authException.getMessage());
+        log.debug("Request method: {}, remote address: {}",
+                request.getMethod(), request.getRemoteAddr());
+
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
@@ -35,6 +43,8 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
         body.put("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
         body.put("message", authException.getMessage());
         body.put("details", request.getServletPath());
+
+        log.debug("Sending authentication error response: {}", body);
 
         mapper.writeValue(response.getOutputStream(), body);
     }
